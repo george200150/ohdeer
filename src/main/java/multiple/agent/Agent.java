@@ -4,7 +4,7 @@ package multiple.agent;
  * An abstract software single.agent class. The single.agent must be managed by the Simulation
  * class
  */
-public abstract class Agent {
+public abstract class Agent {  // extends Thread
 
     /**
      * Provides a Percept to the single.agent. If the single.agent has internal state, this

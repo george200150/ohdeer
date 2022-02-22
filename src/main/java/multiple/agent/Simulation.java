@@ -34,11 +34,19 @@ public abstract class Simulation {
         env.currentState().display();
 
         while (!isComplete()) {
-            Percept p = env.getPercept(agent);
-            agent.see(p);
-            Action action = agent.selectAction();
-            env.updateState(agent, action);
-            //env.currentState().display();
+            for (Agent agent : this.hunterAgents) {
+                Percept p = env.getPercept(agent);
+                agent.see(p);
+                Action action = agent.selectAction();
+                env.updateState(agent, action);
+            }
+
+//            Percept p = env.getPercept(deerAgent);
+//            deerAgent.see(p);
+//            Action action = deerAgent.selectAction();
+//            env.updateState(deerAgent, action);
+
+            env.currentState().display();
         }
         System.out.println("END of simulation");
     }
