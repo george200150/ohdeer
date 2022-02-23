@@ -34,7 +34,7 @@ public abstract class Simulation {
 			agent.see(p);
 			Action action = agent.selectAction();
 			env.updateState(agent, action);
-			//env.currentState().display();
+			env.currentState().display();
 		}
 		System.out.println("END of simulation");
 	}

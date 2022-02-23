@@ -21,7 +21,6 @@ public class RandomWalk extends Action {
     public State execute(Agent a, State s) {
 
         int x, y;
-        int dir;
         int newX, newY;
         PredatorPreyState state = null;
 
