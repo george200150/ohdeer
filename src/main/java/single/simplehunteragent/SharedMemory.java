@@ -54,7 +54,11 @@ public class SharedMemory {
             deerX = -1;
             deerY = -1;
             viewCount = 0;
-            lastModified = 0L;
+            lastModified = -1L;
         }
+    }
+
+    public long getLastModified() {
+        return lastModified;
     }
 }

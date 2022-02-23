@@ -11,7 +11,7 @@ public class HunterSimulation extends Simulation {
 
 	/** The simulation is complete when the robot has cleaned all the dirt */
 	protected boolean isComplete() {
-		return !((HunterState) (env.currentState())).getIsDeerAlive();
+		return !((HunterState) (env.currentState())).isDeerAlive();
 	}
 
 	/**

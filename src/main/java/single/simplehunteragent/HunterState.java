@@ -22,12 +22,21 @@ public class HunterState extends State {
 	 * Default map for initial state. The room is completely surrounded by walls
 	 */
 	protected static int[][] defaultMap = {
-			{HILL, HILL, HILL, HILL, HILL},
-			{HILL, CLEAR, CLEAR, CLEAR, HILL},
-			{HILL, CLEAR, CLEAR, CLEAR, HILL},
-			{HILL, CLEAR, CLEAR, DEER, HILL},
-			{HILL, HILL, HILL, HILL, HILL}};
+			{ HILL, HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL },
+			{ HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL },
+			{ HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL },
+			{ HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL },
+			{ HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL },
+			{ HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL },
+			{ HILL, CLEAR, CLEAR, CLEAR, CLEAR, DEER,  CLEAR, CLEAR, CLEAR, HILL },
+			{ HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL },
+			{ HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL },
+			{ HILL, HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL }
+	};
 	private static int n;
+
+//	private static int[] hunterLOS = new int[]{-2, -1, 0, 1, 2};
+	private static int[] hunterLOS = new int[]{-3, -2, -1, 0, 1, 2, 3};  // Hunters' Lane Of Sight
 
 
 	/* Variables for the state of the single.agent. */
@@ -143,8 +152,8 @@ public class HunterState extends State {
 	}
 
 	public boolean isDeerInEyesight(int x, int y) {
-		for (int i : new int[]{-2, -1, 0, 1, 2}) {
-			for (int j : new int[]{-2, -1, 0, 1, 2}) {
+		for (int i : hunterLOS) {
+			for (int j : hunterLOS) {
 				if (inBounds(x + i, y + j) && map[x + i][y + j] == DEER) {
 					return true;
 				}
@@ -167,8 +176,8 @@ public class HunterState extends State {
 	}
 
 	public int getDeerX(int x, int y) {  // only for eyesight range
-		for (int i : new int[]{-2, -1, 0, 1, 2}) {
-			for (int j : new int[]{-2, -1, 0, 1, 2}) {
+		for (int i : hunterLOS) {
+			for (int j : hunterLOS) {
 				if (inBounds(x + i, y + j) && hasDeer(x + i, y + j)) {
 					return x + i;
 				}
@@ -178,8 +187,8 @@ public class HunterState extends State {
 	}
 
 	public int getDeerY(int x, int y) {  // only for eyesight range (could be refactored, but I like only python tuples)
-		for (int i : new int[]{-2, -1, 0, 1, 2}) {
-			for (int j : new int[]{-2, -1, 0, 1, 2}) {
+		for (int i : hunterLOS) {
+			for (int j : hunterLOS) {
 				if (inBounds(x + i, y + j) && hasDeer(x + i, y + j)) {
 					return y + j;
 				}
@@ -214,7 +223,8 @@ public class HunterState extends State {
 	 * Returns true if the location is within bounds of the state's map.
 	 */
 	public boolean inBounds(int x, int y) {
-		if (x >= 0 && x < width && y >= 0 && y < height)
+//		if (x >= 0 && x < width && y >= 0 && y < height)
+		if (x >= 1 && x < width-1 && y >= 1 && y < height-1)
 			return true;
 		else
 			return false;
@@ -223,7 +233,7 @@ public class HunterState extends State {
 	/**
 	 * Returns the number of dirty locations in the state.
 	 */
-	public boolean getIsDeerAlive() {
+	public boolean isDeerAlive() {
 		return isDeerAlive;
 	}
 
@@ -249,7 +259,7 @@ public class HunterState extends State {
 		for (int i = 1; i < height - 1; i++) {
 			System.out.print(i + "|");
 			for (int j = 1; j < width - 1; j++) {
-				if (i == agentY && j == agentX)
+				if (i == agentX && j == agentY)
 					System.out.print("A");
 				else if (hasDeer(i, j))
 					System.out.print("*");
@@ -276,7 +286,6 @@ public class HunterState extends State {
 			String input = console.readLine();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
-			return;
 		}
 	}
 }

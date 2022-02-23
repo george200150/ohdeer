@@ -39,10 +39,10 @@ public class RandomSeek extends Action {
 		Random rand = new Random();
 
 		while (true) {
-			newX = x + rand.nextInt(2) - 1;  // x +/-= 1
-			newY = y + rand.nextInt(2) - 1;  // y +/-= 1
+			newX = x + rand.nextInt(3) - 1;  // x +/-= 1
+			newY = y + rand.nextInt(3) - 1;  // y +/-= 1
 
-			if (state.inBounds(newX, newY)) {
+			if (state.inBounds(newX, newY) && !(newX == x && newY == y)) { // don't just stay there...
 				state.setAgentX(newX);
 				state.setAgentY(newY);
 				break;
