@@ -23,6 +23,7 @@ public class AnnounceDeerLocation extends Action {
         shm.setDeerX(state.getDeerX(x, y));
         shm.setDeerY(state.getDeerY(x, y));
         shm.setLastModified();
+        shm.broadcastDeerData();
         return state;
     }
 

@@ -4,15 +4,14 @@ import single.agent.Action;
 import single.agent.Agent;
 import single.agent.State;
 
+
 /**
  * A vacuum cleaning world action that causes the single.agent to suck up dirt from it
  * current location.
  */
 public class ShootDeer extends Action {
 
-	public ShootDeer() {
-
-	}
+	public ShootDeer() { }
 
 	/**
 	 * Returns the state that results from the single.agent sucking up dirt in the given

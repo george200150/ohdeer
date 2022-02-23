@@ -6,6 +6,7 @@ import single.agent.State;
 
 import java.util.Random;
 
+
 /**
  * A vacuum cleaning world action that causes the single.agent to turn 90 degrees to
  * the right.
@@ -13,7 +14,6 @@ import java.util.Random;
 public class RandomSeek extends Action {
 
 	public RandomSeek() {
-
 	}
 
 	/**

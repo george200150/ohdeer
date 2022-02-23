@@ -24,6 +24,7 @@ public class HunterSimulation extends Simulation {
 		System.out.println();
 
 		HunterAgent a = new HunterAgent();
+		SharedMemory.getInstance().addObserver(a);
 		HunterEnvironment env = new HunterEnvironment();
 		HunterSimulation sim = new HunterSimulation(env, a);
 		HunterState initState = HunterState.getInitState();

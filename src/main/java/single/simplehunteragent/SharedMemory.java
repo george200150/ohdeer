@@ -1,6 +1,8 @@
 package single.simplehunteragent;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class SharedMemory {
 
@@ -10,6 +12,7 @@ public class SharedMemory {
     private static int viewCount;
 
     private static int noHunters = 1;  // TODO: change for MAS (depends on run config)
+    private final List<ObserverAgent> observers = new ArrayList<>();
 
     private static SharedMemory instance;
 
@@ -18,6 +21,16 @@ public class SharedMemory {
         deerY = -1;
         lastModified = 0L;
         viewCount = 0;
+    }
+
+    public void addObserver(ObserverAgent agent){
+        observers.add(agent);
+    }
+
+    public void broadcastDeerData(){
+        for (ObserverAgent observer : observers) {
+            observer.sendDeerData(deerX, deerY, lastModified); // viewCount will be incremented in observer
+        }
     }
 
     public static SharedMemory getInstance() {
