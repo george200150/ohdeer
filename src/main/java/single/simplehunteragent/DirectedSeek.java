@@ -19,7 +19,7 @@ public class DirectedSeek extends Action {
         int diagonalSteps = min;
         int straightSteps = max - min;
 
-        return (int) Math.sqrt(2) * diagonalSteps + straightSteps; // - 1 maybe
+        return (int) Math.sqrt(2) * diagonalSteps + straightSteps - 1; // tile count = noTurns + 1
     }
 
     @Override
@@ -41,46 +41,42 @@ public class DirectedSeek extends Action {
 
         SharedMemory shm = SharedMemory.getInstance();
 
+        deerX = shm.getDeerX();
+        deerY = shm.getDeerY();
+        int noTurns = manhattenWithDiagonal(x, y, deerX, deerY); // speed == 1unit/turn, so it does not matter here
+        System.out.println("noTurns = " + noTurns);
 
         // we have a local cache in HunterAgent (x,y, lastModified)
         // if lastModified is less recent than the one from shm, then update local cache
-         if (agent.cachedObjectiveLastModified >= shm.getLastModified()) {
+         if (agent.cachedTurnsRemaining > 0 &&
+                 agent.cachedObjectiveX == shm.getDeerX() &&
+                 agent.cachedObjectiveY == shm.getDeerY()) {
+             agent.cachedTurnsRemaining = noTurns;
              state = moveTowardsObjective(agent, state);
              return state;
          }
 
         // Here, we know for sure that shm must have newer information and we move our course towards another objective.
-        agent.cachedObjectiveLastModified = shm.getLastModified();
-
-        deerX = shm.getDeerX();
-        deerY = shm.getDeerY();
-        shm.incrementViewCount();
-
-
         // compute number of turns it takes to reach deer location
-        int noTurns = manhattenWithDiagonal(x, y, deerX, deerY); // speed == 1unit/turn, so it does not matter here
-        System.out.println("noTurns = " + noTurns);
-
-        // TODO: remove after debugging (use case - information expired; deer not found)
-        // noTurns = noTurns / 2;
-
         Random rand = new Random();
         // possibility to intercept deer movement as turns go on (don't follow, meet head on)
         // number of turns * (deer) speed => radius of circle
         // decide where to go based on the circle of possible future locations of the deer (don't bother about turns++)
-        while (true) {
+        int tries = 0;
+        while (tries < 100) {
             int drandX = rand.nextInt(noTurns+1);
             int drandY = noTurns - drandX;
 
             int newX = x + drandX;
             int newY = y + drandY;
 
-            if (state.inBounds(newX, newY)) {
+            if (state.inBounds(newX, newY) && !state.isHill(newX, newY) && !(newX == x && newY == y)) {
                 agent.cachedObjectiveX = newX;
                 agent.cachedObjectiveY = newY;
                 agent.cachedTurnsRemaining = noTurns;
                 break;
             }
+            tries++;
         }
 
         state = moveTowardsObjective(agent, state);
@@ -105,10 +101,14 @@ public class DirectedSeek extends Action {
         int stepX = sign(dx);
         int stepY = sign(dy);  // allow (+/-) (1,1), (1,0) or (0,1) movement
 
-        state.setAgentX(state.getAgentX() + stepX);
-        state.setAgentY(state.getAgentY() + stepY);
+        int newX = state.getAgentX() + stepX;
+        int newY = state.getAgentY() + stepY;
 
-        agent.cachedObjectiveLastModified -= 1;
+        if (state.inBounds(newX, newY) && !state.isHill(newX, newY)) {
+            state.setAgentX(newX);
+            state.setAgentY(newY);
+        }
+
         return state;
     }
 

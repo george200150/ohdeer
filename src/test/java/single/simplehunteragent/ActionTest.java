@@ -5,7 +5,6 @@ import org.junit.Test;
 import single.agent.Action;
 import single.agent.Percept;
 
-import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -62,10 +61,8 @@ public class ActionTest {
         env.setInitialState(initState);
 
         SharedMemory shm = SharedMemory.getInstance();
-        assertEquals("Deer location is yet unkown!", shm.getDeerX(), -1);
-        assertEquals("Deer location is yet unkown!", shm.getDeerY(), -1);
-        assertEquals("Default Last Modified is 0L!", shm.getLastModified(), 0L);
-        long timestamp = new Date().getTime();
+        assertEquals("Deer location is yet unknown!", shm.getDeerX(), -1);
+        assertEquals("Deer location is yet unknown!", shm.getDeerY(), -1);
 
         Percept p = env.getPercept(agent);
         agent.see(p);
@@ -77,8 +74,6 @@ public class ActionTest {
 
         assertEquals("Deer is at (4,4)!", 4, shm.getDeerX());
         assertEquals("Deer is at (4,4)!", 4, shm.getDeerY());
-        assertTrue("Modification should have been made between timestamp and now!",
-                shm.getLastModified() <= new Date().getTime() && shm.getLastModified() >= timestamp);
     }
 
     @Test
@@ -185,7 +180,7 @@ public class ActionTest {
         HunterEnvironment env = new HunterEnvironment();
 
         HunterState initState = HunterState.getInitState();
-        initState.setDefaultMap(mapConfiguration);
+        HunterState.setDefaultMap(mapConfiguration);
         initState.setAgentX(5);
         initState.setAgentY(5);
         env.setInitialState(initState);

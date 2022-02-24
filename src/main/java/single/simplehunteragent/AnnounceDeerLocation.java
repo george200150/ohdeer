@@ -22,7 +22,6 @@ public class AnnounceDeerLocation extends Action {
         SharedMemory shm = SharedMemory.getInstance();
         shm.setDeerX(state.getDeerX(x, y));
         shm.setDeerY(state.getDeerY(x, y));
-        shm.setLastModified();
         shm.broadcastDeerData();
         return state;
     }
