@@ -8,12 +8,13 @@ public class SharedMemory {
     private static int deerX;
     private static int deerY;
 
-    private static int noHunters = 1;  // TODO: change for MAS (depends on run config)
+    private static int noHunters;
     private final List<ObserverAgent> observers = new ArrayList<>();
 
     private static SharedMemory instance;
 
-    private SharedMemory() {
+    private SharedMemory(int noH) {
+        noHunters = noH;
         deerX = -1;
         deerY = -1;
     }
@@ -30,7 +31,7 @@ public class SharedMemory {
 
     public static SharedMemory getInstance() {
         if (instance == null) {
-            instance = new SharedMemory();
+            instance = new SharedMemory(1);
         }
         return instance;
     }

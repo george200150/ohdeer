@@ -46,10 +46,8 @@ public class DirectedSeek extends Action {
         int noTurns = manhattenWithDiagonal(x, y, deerX, deerY); // speed == 1unit/turn, so it does not matter here
         System.out.println("noTurns = " + noTurns);
 
-        // we have a local cache in HunterAgent (x,y, lastModified)
-        // if lastModified is less recent than the one from shm, then update local cache
-         if (agent.cachedTurnsRemaining > 0 &&
-                 agent.cachedObjectiveX == shm.getDeerX() &&
+        // we have a local cache in HunterAgent (x, y)
+         if (agent.cachedObjectiveX == shm.getDeerX() &&
                  agent.cachedObjectiveY == shm.getDeerY()) {
              agent.cachedTurnsRemaining = noTurns;
              state = moveTowardsObjective(agent, state);

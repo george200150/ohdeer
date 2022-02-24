@@ -2,14 +2,14 @@ package single.simplehunteragent;
 
 import single.agent.Simulation;
 
-/** A simulator for the vacuum cleaning world environment. */
+/** A simulator for the predator-prey world environment. */
 public class HunterSimulation extends Simulation {
 
 	public HunterSimulation(HunterEnvironment env, HunterAgent a) {
 		super(env, a);
 	}
 
-	/** The simulation is complete when the robot has cleaned all the dirt */
+	/** The simulation is complete when the hunters have shot the deer */
 	protected boolean isComplete() {
 		return !((HunterState) (env.currentState())).isDeerAlive();
 	}
@@ -19,7 +19,7 @@ public class HunterSimulation extends Simulation {
 	 */
 	public static void main(String[] args) {
 
-		System.out.println("The Vacuum Cleaner World Agent Test");
+		System.out.println("The Predator-Prey World Agent Test");
 		System.out.println("-----------------------------------");
 		System.out.println();
 

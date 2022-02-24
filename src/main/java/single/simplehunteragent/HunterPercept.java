@@ -4,15 +4,15 @@ import single.agent.Agent;
 import single.agent.Percept;
 
 
-/** A percept in the vacuum cleaning world. */
+/** A percept in the predator-prey world. */
 public class HunterPercept extends Percept {
 	protected boolean deer;
 	protected boolean inrange;
 	protected boolean hill;
 
 	/**
-	 * Constructs a vacuum world percept. If the single.agent is in a square that has
-	 * dirt, then creates a percept that sees dirt.
+	 * Constructs a predator-prey world percept. If the single.agent has in its range the deer, then it creates
+	 * a percept that sees the deer. If close enough, it tells the hunter that it can shoot the deer.
 	 */
 	public HunterPercept(HunterState state, Agent agent) {
 
@@ -23,7 +23,7 @@ public class HunterPercept extends Percept {
 		x = state.getAgentX();
 		y = state.getAgentY();
 
-		/** determine dirt */
+		/** determine deer range */
 		if (state.isDeerInEyesight(x, y)) {
 			inrange = state.isDeerInGunsight(x, y);
 			deer = true;
@@ -37,26 +37,20 @@ public class HunterPercept extends Percept {
 
 
 	/**
-	 * Returns true if the percept reflects that the single.agent is over dirt.
+	 * Returns true if the percept reflects that the single.agent has in LOS a deer.
 	 */
 	public boolean seeDeer() {
 		return deer;
 	}
 
+	/**
+	 * Returns true if the percept reflects that the single.agent has in gun's range a deer.
+	 */
 	public boolean lockDeer() {
 		return inrange;
 	}
 
-	/**
-	 * Returns true if the percept reflects that the square immediately in front
-	 * of the single.agent contains an obstacle.
-	 */
-	public boolean seeHill() {
-		return hill;
-	}
-
 	public String toString() {
-
 		StringBuffer pstring;
 
 		pstring = new StringBuffer(5);

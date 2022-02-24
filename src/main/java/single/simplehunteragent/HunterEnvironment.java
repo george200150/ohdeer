@@ -6,7 +6,7 @@ import single.agent.Environment;
 import single.agent.Percept;
 
 
-/** A simulator for the vacuum cleaning world environment. */
+/** A simulator for the predator-prey world environment. */
 public class HunterEnvironment extends Environment {
   public HunterEnvironment() { }
 

@@ -8,8 +8,7 @@ import java.util.Random;
 
 
 /**
- * A vacuum cleaning world action that causes the single.agent to turn 90 degrees to
- * the right.
+ * A predator-prey world action that causes the single.agent to move randomly in another location.
  */
 public class RandomSeek extends Action {
 
@@ -17,10 +16,9 @@ public class RandomSeek extends Action {
 	}
 
 	/**
-	 * Returns the state that results from the single.agent turning right in the given
-	 * state. In order to avoid creating unnecessary objects, we do not create a
-	 * new state, but instead modify the old one. This would have to changed if
-	 * the Environment needs to maintain a history of states.
+	 * Returns the state that results from the single.agent moving to a random position in the given state.
+	 * In order to avoid creating unnecessary objects, we do not create a new state, but instead modify the old one.
+	 * This would have to changed if the Environment needs to maintain a history of states.
 	 */
 	public State execute(Agent a, State s) {
 
@@ -53,7 +51,6 @@ public class RandomSeek extends Action {
 
 		return state;
 	}
-
 
 	public String toString() {
 		return "UNDIRECTED SEEK";

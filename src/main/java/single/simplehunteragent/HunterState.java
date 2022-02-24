@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 
-/** Represents a state in the vacuum world. */
+/** Represents a state in the predator-prey world. */
 public class HunterState extends State {
 
 	/* Constants for the initial state of the single.agent. */
@@ -19,7 +19,7 @@ public class HunterState extends State {
 	private static final int HILL = 2;
 
 	/*
-	 * Default map for initial state. The room is completely surrounded by walls
+	 * Default map for initial state. The forest is completely surrounded by hills
 	 */
 	protected static int[][] defaultMap = {
 			{ HILL, HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL },
@@ -53,11 +53,11 @@ public class HunterState extends State {
 	protected int height;
 	protected int width;
 
-	static final int DEFAULT_HEIGHT = 5;
-	static final int DEFAULT_WIDTH = 5;
+	static final int DEFAULT_HEIGHT = 10;
+	static final int DEFAULT_WIDTH = 10;
 
 	/**
-	 * Returns the default initial state for the vacuum world.
+	 * Returns the default initial state for the predator-prey world.
 	 */
 	public static HunterState getInitState() {
 
@@ -78,9 +78,8 @@ public class HunterState extends State {
 		defaultMap = map;
 	}
 
-
 	/**
-	 * Constructs a new vacuum state.
+	 * Constructs a new hunter state.
 	 */
 	public HunterState() {
 	}
@@ -113,9 +112,8 @@ public class HunterState extends State {
 		agentY = y;
 	}
 
-
 	/**
-	 * Removes dirt from the specified location.
+	 * Removes the deer from the specified location.
 	 */
 	public void killDeer(int x, int y) {
 		// check if deer is in gun range - the shooter is in the middle (x,y) and we check their surroundings
@@ -203,7 +201,7 @@ public class HunterState extends State {
 
 
 	/**
-	 * Returns true if the specified location has dirt in it.
+	 * Returns true if the specified location has the deer in it.
 	 */
 	public boolean hasDeer(int x, int y) {
 		if (map[x][y] == DEER)
@@ -213,7 +211,7 @@ public class HunterState extends State {
 	}
 
 	/**
-	 * Returns true if the specified location is a wall.
+	 * Returns true if the specified location is a hill.
 	 */
 	public boolean isHill(int x, int y) {
 		if (map[x][y] == HILL)
@@ -227,15 +225,11 @@ public class HunterState extends State {
 	 * Returns true if the location is within bounds of the state's map.
 	 */
 	public boolean inBounds(int x, int y) {
-		if (x >= 0 && x < width && y >= 0 && y < height)
-//		if (x >= 1 && x < width-1 && y >= 1 && y < height-1)
-			return true;
-		else
-			return false;
+		return x >= 0 && x < width && y >= 0 && y < height;
 	}
 
 	/**
-	 * Returns the number of dirty locations in the state.
+	 * Returns the state of deer's life.
 	 */
 	public boolean isDeerAlive() {
 		return isDeerAlive;
@@ -244,7 +238,7 @@ public class HunterState extends State {
 	/**
 	 * Prints an output of the state to the screen. This output includes a map as
 	 * well as information about the single.agent's location and the direction it is
-	 * facing. On the map, "A" denotes the single.agent and "*" denotes dirt.
+	 * facing. On the map, "A" denotes the single.agent and "*" denotes the deer.
 	 */
 	public void display() {
 		for (int j = 1; j < width - 1; j++)
@@ -256,10 +250,6 @@ public class HunterState extends State {
 			System.out.print("+--");
 		System.out.println("+");
 
-		/*
-		 * To print to the screen properly, the loop in the Y direction must be
-		 * the outer loop.
-		 */
 		for (int i = 1; i < height - 1; i++) {
 			System.out.print(i + "|");
 			for (int j = 1; j < width - 1; j++) {

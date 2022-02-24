@@ -5,7 +5,7 @@ import single.agent.Agent;
 import single.agent.Percept;
 
 
-/** The Vacuum Cleaning Agent - it is a simple reactive single.agent*/
+/** The Hunter Agent - it is a simple reactive single.agent*/
 public class HunterAgent extends Agent implements ObserverAgent {
 
 	/**
@@ -36,11 +36,10 @@ public class HunterAgent extends Agent implements ObserverAgent {
 					SharedMemory.getInstance().getDeerY() != cachedObjectiveY) {
 				return new AnnounceDeerLocation();
 			}
-			if (cachedTurnsRemaining > 0)
-				// if objective has been reached, then resume to random movement
+			if (cachedObjectiveX != -1 && SharedMemory.getInstance().getDeerX() != -1) // deer was spotted; check shm
 				return new DirectedSeek();
 			else
-				return new RandomSeek();
+				return new RandomSeek(); // if objective has been reached, then resume to random movement
 		}
 		return new RandomSeek();
 	}
@@ -49,7 +48,5 @@ public class HunterAgent extends Agent implements ObserverAgent {
 	public void sendDeerData(int deerX, int deerY) {
 		this.cachedObjectiveX = deerX;
 		this.cachedObjectiveY = deerY;
-		this.cachedTurnsRemaining = 2;  // TODO: may have problems with critical resources...
-		// SharedMemory.getInstance().incrementViewCount() is NOT done here, for avoiding over-announcement
 	}
 }
