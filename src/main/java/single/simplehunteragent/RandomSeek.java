@@ -48,11 +48,11 @@ public class RandomSeek extends Action {
 			}
 			tries++;
 		}
-
 		return state;
 	}
 
 	public String toString() {
 		return "UNDIRECTED SEEK";
 	}
+
 }

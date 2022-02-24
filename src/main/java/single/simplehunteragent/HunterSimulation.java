@@ -2,6 +2,7 @@ package single.simplehunteragent;
 
 import single.agent.Simulation;
 
+
 /** A simulator for the predator-prey world environment. */
 public class HunterSimulation extends Simulation {
 
@@ -9,7 +10,9 @@ public class HunterSimulation extends Simulation {
 		super(env, a);
 	}
 
-	/** The simulation is complete when the hunters have shot the deer */
+	/**
+	 * The simulation is complete when the hunters have shot the deer
+	 */
 	protected boolean isComplete() {
 		return !((HunterState) (env.currentState())).isDeerAlive();
 	}

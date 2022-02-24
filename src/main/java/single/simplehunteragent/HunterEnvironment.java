@@ -8,8 +8,9 @@ import single.agent.Percept;
 
 /** A simulator for the predator-prey world environment. */
 public class HunterEnvironment extends Environment {
-  public HunterEnvironment() { }
 
+  public HunterEnvironment() {
+  }
 
   /**
    * Creates a percept for an single.agent. This implements the see: S -> P
@@ -28,7 +29,6 @@ public class HunterEnvironment extends Environment {
     }
   }
 
-
   /**
    * Executes an single.agent's action and update the environment's state.
    */
@@ -37,4 +37,5 @@ public class HunterEnvironment extends Environment {
     System.out.println("Action: " + action.toString());
     System.out.println();
   }
+
 }

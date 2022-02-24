@@ -22,20 +22,20 @@ public class HunterState extends State {
 	 * Default map for initial state. The forest is completely surrounded by hills
 	 */
 	protected static int[][] defaultMap = {
-			{ HILL, HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL },
-			{ HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL },
-			{ HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL },
-			{ HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL },
-			{ HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL },
-			{ HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL },
-			{ HILL, CLEAR, CLEAR, CLEAR, CLEAR, DEER,  CLEAR, CLEAR, CLEAR, HILL },
-			{ HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL },
-			{ HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL },
-			{ HILL, HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL }
+			{HILL, HILL, HILL, HILL, HILL, HILL, HILL, HILL, HILL, HILL},
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, DEER, CLEAR, CLEAR, CLEAR, HILL},
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
+			{HILL, HILL, HILL, HILL, HILL, HILL, HILL, HILL, HILL, HILL}
 	};
 	private static int n;
 
-//	private static int[] hunterLOS = new int[]{-2, -1, 0, 1, 2};
+	//	private static int[] hunterLOS = new int[]{-2, -1, 0, 1, 2};
 	private static int[] hunterLOS = new int[]{-4, -3, -2, -1, 0, 1, 2, 3, 4};  // Hunters' Lane Of Sight
 
 
@@ -74,7 +74,7 @@ public class HunterState extends State {
 		return state;
 	}
 
-	public static void setDefaultMap(int[][] map){
+	public static void setDefaultMap(int[][] map) {
 		defaultMap = map;
 	}
 
@@ -204,20 +204,14 @@ public class HunterState extends State {
 	 * Returns true if the specified location has the deer in it.
 	 */
 	public boolean hasDeer(int x, int y) {
-		if (map[x][y] == DEER)
-			return true;
-		else
-			return false;
+		return map[x][y] == DEER;
 	}
 
 	/**
 	 * Returns true if the specified location is a hill.
 	 */
 	public boolean isHill(int x, int y) {
-		if (map[x][y] == HILL)
-			return true;
-		else
-			return false;
+		return map[x][y] == HILL;
 	}
 
 
@@ -282,4 +276,5 @@ public class HunterState extends State {
 			System.out.println(e.getMessage());
 		}
 	}
+
 }

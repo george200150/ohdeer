@@ -4,7 +4,9 @@ import single.agent.Action;
 import single.agent.Agent;
 import single.agent.State;
 
+
 public class AnnounceDeerLocation extends Action {
+
     @Override
     public State execute(Agent a, State s) {
 
@@ -30,4 +32,5 @@ public class AnnounceDeerLocation extends Action {
     public String toString() {
         return "ANNOUNCED DEER";
     }
+
 }

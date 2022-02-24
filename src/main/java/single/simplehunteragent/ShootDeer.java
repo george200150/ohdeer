@@ -10,7 +10,8 @@ import single.agent.State;
  */
 public class ShootDeer extends Action {
 
-	public ShootDeer() { }
+	public ShootDeer() {
+	}
 
 	/**
 	 * Returns the state that results from the single.agent shooting the deer in a 1 unit circle in the given state.
@@ -36,4 +37,5 @@ public class ShootDeer extends Action {
 	public String toString() {
 		return "SHOOT DEER!";
 	}
+
 }

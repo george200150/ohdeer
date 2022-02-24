@@ -11,7 +11,6 @@ public class HunterAgent extends Agent implements ObserverAgent {
 	/**
 	 * a deliberative single.agent stores its internal state - it may keep a history in the environment
 	 */
-
 	private boolean deer;
 	private boolean inrange;
 
@@ -24,8 +23,10 @@ public class HunterAgent extends Agent implements ObserverAgent {
 		inrange = ((HunterPercept) p).lockDeer();
 	}
 
+	/**
+	 * The single.agent action selection function
+	 */
 	public Action selectAction() {
-		/** The single.agent action selection function */
 		if (deer) {
 			if (inrange) {
 				return new ShootDeer();
@@ -49,4 +50,5 @@ public class HunterAgent extends Agent implements ObserverAgent {
 		this.cachedObjectiveX = deerX;
 		this.cachedObjectiveY = deerY;
 	}
+
 }

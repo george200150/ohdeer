@@ -76,7 +76,6 @@ public class DirectedSeek extends Action {
             }
             tries++;
         }
-
         state = moveTowardsObjective(agent, state);
 
         return state;
@@ -106,12 +105,11 @@ public class DirectedSeek extends Action {
             state.setAgentX(newX);
             state.setAgentY(newY);
         }
-
         return state;
     }
-
 
     public String toString() {
         return "DIRECTED SEEK";
     }
+
 }

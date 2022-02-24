@@ -3,6 +3,7 @@ package single.simplehunteragent;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class SharedMemory {
 
     private static int deerX;

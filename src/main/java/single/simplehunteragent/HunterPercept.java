@@ -6,6 +6,7 @@ import single.agent.Percept;
 
 /** A percept in the predator-prey world. */
 public class HunterPercept extends Percept {
+
 	protected boolean deer;
 	protected boolean inrange;
 	protected boolean hill;
@@ -35,7 +36,6 @@ public class HunterPercept extends Percept {
 
 	}
 
-
 	/**
 	 * Returns true if the percept reflects that the single.agent has in LOS a deer.
 	 */
@@ -62,4 +62,5 @@ public class HunterPercept extends Percept {
 			pstring.append("CLEAR ");
 		return pstring.toString();
 	}
+
 }
