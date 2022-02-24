@@ -29,7 +29,7 @@ public class SharedMemory {
 
     public void broadcastDeerData(){
         for (ObserverAgent observer : observers) {
-            observer.sendDeerData(deerX, deerY, lastModified); // viewCount will be incremented in observer
+            observer.sendDeerData(deerX, deerY, lastModified); // viewCount will be incremented when hunters move
         }
     }
 
@@ -67,11 +67,19 @@ public class SharedMemory {
             deerX = -1;
             deerY = -1;
             viewCount = 0;
-            lastModified = -1L;
+            //lastModified = -1L;  // TODO: decide if we could give up deleting this (only delete X,Y)
         }
     }
 
     public long getLastModified() {
         return lastModified;
+    }
+
+    public void reset() {
+        deerX = -1;
+        deerY = -1;
+        lastModified = 0L;
+        viewCount = 0;
+        observers.removeIf((ignored) -> true); // remove all
     }
 }

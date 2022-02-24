@@ -38,15 +38,17 @@ public class RandomSeek extends Action {
 
 		Random rand = new Random();
 
-		while (true) {
+		int tries = 0;
+		while (tries < 100) {
 			newX = x + rand.nextInt(3) - 1;  // x +/-= 1
 			newY = y + rand.nextInt(3) - 1;  // y +/-= 1
 
-			if (state.inBounds(newX, newY) && !(newX == x && newY == y)) { // don't just stay there...
+			if (state.inBounds(newX, newY) && !state.isHill(newX, newY) && !(newX == x && newY == y)) {
 				state.setAgentX(newX);
 				state.setAgentY(newY);
 				break;
 			}
+			tries++;
 		}
 
 		return state;

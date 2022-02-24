@@ -24,22 +24,14 @@ public class HunterPercept extends Percept {
 		y = state.getAgentY();
 
 		/** determine dirt */
-		if (state.isDeerInEyesight(x, y)) {  // TODO: change hasDeer/isHill signature to process list/array of ints
-			inrange = false;
-			if (state.isDeerInGunsight(x, y)) {
-				inrange = true;
-			}
+		if (state.isDeerInEyesight(x, y)) {
+			inrange = state.isDeerInGunsight(x, y);
 			deer = true;
 		} else {
 			deer = false;
 			inrange = false;
 		}
-
-		// determine wall
-		if (state.isHill(x, y))  // TODO: will probably not need this function...
-			hill = true;
-		else
-			hill = false;
+		hill = state.isHill(x, y);
 
 	}
 

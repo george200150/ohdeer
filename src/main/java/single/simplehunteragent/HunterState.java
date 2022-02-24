@@ -36,7 +36,7 @@ public class HunterState extends State {
 	private static int n;
 
 //	private static int[] hunterLOS = new int[]{-2, -1, 0, 1, 2};
-	private static int[] hunterLOS = new int[]{-3, -2, -1, 0, 1, 2, 3};  // Hunters' Lane Of Sight
+	private static int[] hunterLOS = new int[]{-4, -3, -2, -1, 0, 1, 2, 3, 4};  // Hunters' Lane Of Sight
 
 
 	/* Variables for the state of the single.agent. */
@@ -72,6 +72,10 @@ public class HunterState extends State {
 		state.agentY = INIT_Y;
 		n = state.width;
 		return state;
+	}
+
+	public static void setDefaultMap(int[][] map){
+		defaultMap = map;
 	}
 
 
@@ -223,8 +227,8 @@ public class HunterState extends State {
 	 * Returns true if the location is within bounds of the state's map.
 	 */
 	public boolean inBounds(int x, int y) {
-//		if (x >= 0 && x < width && y >= 0 && y < height)
-		if (x >= 1 && x < width-1 && y >= 1 && y < height-1)
+		if (x >= 0 && x < width && y >= 0 && y < height)
+//		if (x >= 1 && x < width-1 && y >= 1 && y < height-1)
 			return true;
 		else
 			return false;

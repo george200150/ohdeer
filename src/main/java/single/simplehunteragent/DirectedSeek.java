@@ -6,12 +6,20 @@ import single.agent.State;
 
 import java.util.Random;
 
+
 public class DirectedSeek extends Action {
 
-    private int euclidean(int x1, int x2, int y1, int y2) {
-        double deltaX = x1 - x2;
-        double deltaY = y1 - y2;
-        return (int) Math.floor(Math.sqrt(deltaX * deltaX + deltaY * deltaY));
+    int manhattenWithDiagonal(int x1, int y1, int x2, int y2) {
+        int dx = Math.abs(x2 - x1);
+        int dy = Math.abs(y2 - y1);
+
+        int min = Math.min(dx, dy);
+        int max = Math.max(dx, dy);
+
+        int diagonalSteps = min;
+        int straightSteps = max - min;
+
+        return (int) Math.sqrt(2) * diagonalSteps + straightSteps; // - 1 maybe
     }
 
     @Override
@@ -50,7 +58,11 @@ public class DirectedSeek extends Action {
 
 
         // compute number of turns it takes to reach deer location
-        int noTurns = euclidean(x, deerX, y, deerY); // speed == 1unit/turn, so it does not matter here
+        int noTurns = manhattenWithDiagonal(x, y, deerX, deerY); // speed == 1unit/turn, so it does not matter here
+        System.out.println("noTurns = " + noTurns);
+
+        // TODO: remove after debugging (use case - information expired; deer not found)
+        // noTurns = noTurns / 2;
 
         Random rand = new Random();
         // possibility to intercept deer movement as turns go on (don't follow, meet head on)
@@ -66,7 +78,7 @@ public class DirectedSeek extends Action {
             if (state.inBounds(newX, newY)) {
                 agent.cachedObjectiveX = newX;
                 agent.cachedObjectiveY = newY;
-                agent.cachedTurnsRemaining = noTurns; // TODO: may have less turns (because of euclidean/manhattan computation)
+                agent.cachedTurnsRemaining = noTurns;
                 break;
             }
         }
