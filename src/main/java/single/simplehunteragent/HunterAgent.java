@@ -18,6 +18,10 @@ public class HunterAgent extends Agent implements ObserverAgent {
 	int cachedObjectiveY = -1;
 	int cachedTurnsRemaining = 0;
 
+	public HunterAgent(int uniqId) {
+		super(uniqId);
+	}
+
 	public void see(Percept p) {
 		deer = ((HunterPercept) p).seeDeer();
 		inrange = ((HunterPercept) p).lockDeer();
@@ -29,20 +33,20 @@ public class HunterAgent extends Agent implements ObserverAgent {
 	public Action selectAction() {
 		if (deer) {
 			if (inrange) {
-				return new ShootDeer();
+				return new ShootDeer(this.uniqId);
 			}
 
 			if (cachedObjectiveX == -1 && SharedMemory.getInstance().getDeerX() == -1 ||
 					SharedMemory.getInstance().getDeerX() != cachedObjectiveX ||
 					SharedMemory.getInstance().getDeerY() != cachedObjectiveY) {
-				return new AnnounceDeerLocation();
+				return new AnnounceDeerLocation(this.uniqId);
 			}
 			if (cachedObjectiveX != -1 && SharedMemory.getInstance().getDeerX() != -1) // deer was spotted; check shm
-				return new DirectedSeek();
+				return new DirectedSeek(this.uniqId);
 			else
-				return new RandomSeek(); // if objective has been reached, then resume to random movement
+				return new RandomSeek(this.uniqId); // if objective has been reached, then resume to random movement
 		}
-		return new RandomSeek();
+		return new RandomSeek(this.uniqId);
 	}
 
 	@Override

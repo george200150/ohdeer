@@ -7,6 +7,10 @@ import single.agent.State;
 
 public class AnnounceDeerLocation extends Action {
 
+    public AnnounceDeerLocation(int uniqId) {
+        super(uniqId);
+    }
+
     @Override
     public State execute(Agent a, State s) {
 
@@ -18,8 +22,8 @@ public class AnnounceDeerLocation extends Action {
         else
             System.out.println("ERROR - Argument to RandomSeek.execute() is not of type HunterState");
 
-        x = state.getAgentX();
-        y = state.getAgentY();
+        x = state.getAgentX(uniqId);
+        y = state.getAgentY(uniqId);
 
         SharedMemory shm = SharedMemory.getInstance();
         shm.setDeerX(state.getDeerX(x, y));

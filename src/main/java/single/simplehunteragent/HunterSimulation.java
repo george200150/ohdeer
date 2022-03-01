@@ -6,8 +6,10 @@ import single.agent.Simulation;
 /** A simulator for the predator-prey world environment. */
 public class HunterSimulation extends Simulation {
 
-	public HunterSimulation(HunterEnvironment env, HunterAgent a) {
-		super(env, a);
+//	public HunterSimulation(HunterEnvironment env, HunterAgent a, DeerAgent d) {
+	public HunterSimulation(HunterEnvironment env, HunterAgent a, HunterAgent a1) {
+//		super(env, a, d);
+		super(env, a, a1);
 	}
 
 	/**
@@ -26,10 +28,14 @@ public class HunterSimulation extends Simulation {
 		System.out.println("-----------------------------------");
 		System.out.println();
 
-		HunterAgent a = new HunterAgent();
+		HunterAgent a = new HunterAgent(0);
+		HunterAgent a1 = new HunterAgent(1); // !!! strictly necessary that ids start from 0 and are consecutive.
+//		DeerAgent d = new DeerAgent();
 		SharedMemory.getInstance().addObserver(a);
+		SharedMemory.getInstance().addObserver(a1);
 		HunterEnvironment env = new HunterEnvironment();
-		HunterSimulation sim = new HunterSimulation(env, a);
+		//DeerEnvironment envD = new DeerEnvironment();
+		HunterSimulation sim = new HunterSimulation(env, a, a1);
 		HunterState initState = HunterState.getInitState();
 
 		/** starts simulation */

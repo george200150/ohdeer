@@ -1,5 +1,6 @@
 package single.simplehunteragent;
 
+import single.PythonUtils;
 import single.agent.State;
 
 import java.io.BufferedReader;
@@ -11,37 +12,49 @@ import java.io.InputStreamReader;
 public class HunterState extends State {
 
 	/* Constants for the initial state of the single.agent. */
-	protected static int INIT_X = 1;
-	protected static int INIT_Y = 1;
+//	protected static int INIT_X = 1;
+//	protected static int INIT_Y = 1;
+	protected static int[] INIT_X = new int[]{1, 8};
+	protected static int[] INIT_Y = new int[]{1, 8};
+
+//	protected static int INIT_DEER_X = 5;
+//	protected static int INIT_DEER_Y = 5;
 
 	private static final int CLEAR = 0;
 	private static final int DEER = 1;
 	private static final int HILL = 2;
+	private static final int HNTR = 3;
 
 	/*
 	 * Default map for initial state. The forest is completely surrounded by hills
 	 */
 	protected static int[][] defaultMap = {
-			{HILL, HILL, HILL, HILL, HILL, HILL, HILL, HILL, HILL, HILL},
+			{HILL, HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL},
+			{HILL, HNTR,  CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
 			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
 			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
 			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, DEER,  CLEAR, CLEAR, CLEAR, HILL},
 			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
 			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
-			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, DEER, CLEAR, CLEAR, CLEAR, HILL},
-			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
-			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
-			{HILL, HILL, HILL, HILL, HILL, HILL, HILL, HILL, HILL, HILL}
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HNTR,  HILL},
+			{HILL, HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL}
 	};
 	private static int n;
 
 	//	private static int[] hunterLOS = new int[]{-2, -1, 0, 1, 2};
 	private static int[] hunterLOS = new int[]{-4, -3, -2, -1, 0, 1, 2, 3, 4};  // Hunters' Lane Of Sight
+//	private static int[] deerLOS = new int[]{-4, -3, -2, -1, 0, 1, 2, 3, 4};  // Deer's Lane Of Sight
 
 
 	/* Variables for the state of the single.agent. */
-	protected int agentX;
-	protected int agentY;
+//	protected int agentX;
+//	protected int agentY;
+	protected int[] agentX;
+	protected int[] agentY;
+
+//	protected int deerX;
+//	protected int deerY;
 
 	/**
 	 * An array that contains the locations of objects in the world.
@@ -70,6 +83,9 @@ public class HunterState extends State {
 		state.map = defaultMap;
 		state.agentX = INIT_X;
 		state.agentY = INIT_Y;
+
+//		state.deerX = INIT_DEER_X;
+//		state.deerY = INIT_DEER_Y;
 		n = state.width;
 		return state;
 	}
@@ -87,30 +103,66 @@ public class HunterState extends State {
 	/**
 	 * Returns the single.agent's X position.
 	 */
-	public int getAgentX() {
-		return agentX;
+	public int getAgentX(int indx) {
+		return agentX[indx];
 	}
+
+	/**
+	 * Returns the deer.agent's X position.
+	 */
+//	public int getDeerX() {
+//		return deerX;
+//	}
 
 	/**
 	 * Returns the single.agent's Y position.
 	 */
-	public int getAgentY() {
-		return agentY;
+	public int getAgentY(int indx) {
+		return agentY[indx];
 	}
+
+	/**
+	 * Returns the deer.agent's Y position.
+	 */
+//	public int getDeerY() {
+//		return deerY;
+//	}
 
 	/**
 	 * Changes the single.agent's X position.
 	 */
-	public void setAgentX(int x) {
-		agentX = x;
+	public void setAgentX(int x, int indx) {
+		map[agentX[indx]][agentY[indx]] = CLEAR;
+		agentX[indx] = x;
+		map[x][agentY[indx]] = HNTR;
 	}
+
+	/**
+	 * Changes the deer.agent's X position.
+	 */
+//	public void setDeerX(int x) {
+//		map[deerX][deerY] = CLEAR;
+//		deerX = x;
+//		map[x][deerY] = DEER;
+//	}
 
 	/**
 	 * Changes the single.agent's Y position.
 	 */
-	public void setAgentY(int y) {
-		agentY = y;
+	public void setAgentY(int y, int indx) {
+		map[agentX[indx]][agentY[indx]] = CLEAR;
+		agentY[indx] = y;
+		map[agentX[indx]][y] = HNTR;
 	}
+
+	/**
+	 * Changes the deer.agent's Y position.
+	 */
+//	public void setDeerY(int y) {
+//		map[deerX][deerY] = CLEAR;
+//		deerY = y;
+//		map[deerX][y] = DEER;
+//	}
 
 	/**
 	 * Removes the deer from the specified location.
@@ -247,13 +299,15 @@ public class HunterState extends State {
 		for (int i = 1; i < height - 1; i++) {
 			System.out.print(i + "|");
 			for (int j = 1; j < width - 1; j++) {
-				if (i == agentX && j == agentY)
-					System.out.print("A");
-				else if (hasDeer(i, j))
-					System.out.print("*");
-				else
-					System.out.print(" ");
-				System.out.print(" |");
+				for (int indx : PythonUtils.range(INIT_X.length)) {
+					if (i == agentX[indx] && j == agentY[indx])
+						System.out.print("A");
+					else if (hasDeer(i, j))
+						System.out.print("*");
+					else
+						System.out.print(" ");
+					System.out.print(" |");
+				}
 			}
 			System.out.println();
 
@@ -263,18 +317,35 @@ public class HunterState extends State {
 			System.out.println("--+");
 
 		}
-		System.out.println("Location: (" + agentX + "," + agentY + ")");
+		System.out.println("Location A1: (" + agentX[0] + "," + agentY[0] + ")");
+		System.out.println("Location A2: (" + agentX[1] + "," + agentY[1] + ")");
 		System.out.println();
 
 		System.out.println("Press RETURN to continue.");
 
-		BufferedReader console = new BufferedReader(new InputStreamReader(
-				System.in));
+		BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			String input = console.readLine();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
 	}
+
+//	public boolean isHunterInEyesight(int x, int y) {
+////		for (int i : hunterLOS) {
+////			for (int j : hunterLOS) {
+////				return x + i == getAgentX() && y + j == getAgentY();
+////			}
+////		}
+////		return false;
+//		for (int i : deerLOS) {
+//			for (int j : deerLOS) {
+//				if (inBounds(x + i, y + j) && map[x + i][y + j] == HNTR1) {
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
 
 }

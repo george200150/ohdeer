@@ -1,22 +1,30 @@
 package single.agent;
 
+//import single.simplehunteragent.DeerEnvironment;
+
 /**
  * The top-level class for an single.agent simulation. This can be used for either
  * single or multi-single.agent simulations.
  */
 public abstract class Simulation {
 
-	protected Agent agent = null;
+	protected Agent agent;
+//	protected Agent deerAgent;
+	protected Agent otherAgent;
 	protected Environment env;
+//	protected Environment envD;
 
 	/**
 	 * Constructs a new simulation. Initializes the single.agent(or agents vector) and
 	 * the environment.
 	 */
-	public Simulation(Environment e, Agent a) {
+	public Simulation(Environment e, Agent a, Agent d) {
 
 		agent = a;
+//		deerAgent = d;
+		otherAgent = d;
 		env = e;
+//		envD = new DeerEnvironment();
 
 	}
 
@@ -27,9 +35,16 @@ public abstract class Simulation {
 	 */
 	public void start(State initState) {
 		env.setInitialState(initState);
+//		envD.setInitialState(initState);
 		env.currentState().display();
 
 		while (!isComplete()) {
+			Percept pd = env.getPercept(otherAgent);
+			otherAgent.see(pd);
+			Action actionD = otherAgent.selectAction();
+			env.updateState(otherAgent, actionD);
+			env.currentState().display();
+
 			Percept p = env.getPercept(agent);
 			agent.see(p);
 			Action action = agent.selectAction();

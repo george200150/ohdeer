@@ -18,13 +18,18 @@ public class HunterEnvironment extends Environment {
    */
   protected Percept getPercept(Agent a) {
     HunterPercept p;
+//    DeerPercept pd;
 
     if (state instanceof HunterState) {
+//    if (state.hunter) {
       p = new HunterPercept((HunterState) state, a);
       System.out.println("Percept: " + p.toString());
       return p;
     } else {
-      System.out.println("ERROR - state is not a HunterState object.");
+//      pd = new DeerPercept((HunterState) state, a); // TODO: separate Hunter vs Deer States... but not for now.......
+//      System.out.println("Percept: " + pd.toString());
+//      return pd;
+      System.out.println("ERROR !!!");
       return null;
     }
   }

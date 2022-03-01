@@ -50,14 +50,14 @@ public class ActionTest {
 
     @Test
     public void testAnnounceDeerEffectInSharedMemory() {
-        HunterAgent agent = new HunterAgent();
+        HunterAgent agent = new HunterAgent(0);
         SharedMemory.getInstance().addObserver(agent);
         HunterEnvironment env = new HunterEnvironment();
 
         HunterState.setDefaultMap(stuckConfigurationWithDeer);
         HunterState initState = HunterState.getInitState();
-        initState.setAgentX(2);
-        initState.setAgentY(2);
+        initState.setAgentX(2, 0);
+        initState.setAgentY(2, 0);
         env.setInitialState(initState);
 
         SharedMemory shm = SharedMemory.getInstance();
@@ -78,14 +78,14 @@ public class ActionTest {
 
     @Test
     public void testDirectedSeekStuck() {
-        HunterAgent agent = new HunterAgent();
+        HunterAgent agent = new HunterAgent(0);
         SharedMemory.getInstance().addObserver(agent);
         HunterEnvironment env = new HunterEnvironment();
 
         HunterState.setDefaultMap(stuckConfigurationWithDeer);
         HunterState initState = HunterState.getInitState();
-        initState.setAgentX(2);
-        initState.setAgentY(2);
+        initState.setAgentX(2, 0);
+        initState.setAgentY(2, 0);
         env.setInitialState(initState);
 
         Percept p = env.getPercept(agent);
@@ -104,20 +104,20 @@ public class ActionTest {
         assertTrue(action1 instanceof DirectedSeek);
 
         HunterState afterWalk = (HunterState) action1.execute(agent, env.currentState());
-        assertEquals("Should have not moved!", 2, afterWalk.getAgentX());
-        assertEquals("Should have not moved!", 2, afterWalk.getAgentY());
+        assertEquals("Should have not moved!", 2, afterWalk.getAgentX(0));
+        assertEquals("Should have not moved!", 2, afterWalk.getAgentY(0));
     }
 
     @Test
     public void testRandomSeekStuck() {
-        HunterAgent agent = new HunterAgent();
+        HunterAgent agent = new HunterAgent(0);
         SharedMemory.getInstance().addObserver(agent);
         HunterEnvironment env = new HunterEnvironment();
 
         HunterState.setDefaultMap(stuckConfiguration);
         HunterState initState = HunterState.getInitState();
-        initState.setAgentX(2);
-        initState.setAgentY(2);
+        initState.setAgentX(2, 0);
+        initState.setAgentY(2, 0);
         env.setInitialState(initState);
 
         Percept p = env.getPercept(agent);
@@ -128,20 +128,20 @@ public class ActionTest {
         assertTrue(action instanceof RandomSeek);
 
         HunterState afterWalk = (HunterState) action.execute(agent, env.currentState());
-        assertEquals("Should have not moved!", 2, afterWalk.getAgentX());
-        assertEquals("Should have not moved!", 2, afterWalk.getAgentY());
+        assertEquals("Should have not moved!", 2, afterWalk.getAgentX(0));
+        assertEquals("Should have not moved!", 2, afterWalk.getAgentY(0));
     }
 
     @Test
     public void testNotSeeDeer() {
-        HunterAgent agent = new HunterAgent();
+        HunterAgent agent = new HunterAgent(0);
         SharedMemory.getInstance().addObserver(agent);
         HunterEnvironment env = new HunterEnvironment();
 
         HunterState.setDefaultMap(mapConfiguration);
         HunterState initState = HunterState.getInitState();
-        initState.setAgentX(1);
-        initState.setAgentY(1);
+        initState.setAgentX(1, 0);
+        initState.setAgentY(1, 0);
         env.setInitialState(initState);
 
         Percept p = env.getPercept(agent);
@@ -154,14 +154,14 @@ public class ActionTest {
 
     @Test
     public void testSeeDeerOutOfGunRange() {
-        HunterAgent agent = new HunterAgent();
+        HunterAgent agent = new HunterAgent(0);
         SharedMemory.getInstance().addObserver(agent);
         HunterEnvironment env = new HunterEnvironment();
 
         HunterState.setDefaultMap(mapConfiguration);
         HunterState initState = HunterState.getInitState();
-        initState.setAgentX(4);
-        initState.setAgentY(4);
+        initState.setAgentX(4, 0);
+        initState.setAgentY(4, 0);
         env.setInitialState(initState);
 
         Percept p = env.getPercept(agent);
@@ -175,14 +175,14 @@ public class ActionTest {
 
     @Test
     public void testSeeDeerInGunRange() {
-        HunterAgent agent = new HunterAgent();
+        HunterAgent agent = new HunterAgent(0);
         SharedMemory.getInstance().addObserver(agent);
         HunterEnvironment env = new HunterEnvironment();
 
         HunterState initState = HunterState.getInitState();
         HunterState.setDefaultMap(mapConfiguration);
-        initState.setAgentX(5);
-        initState.setAgentY(5);
+        initState.setAgentX(5, 0);
+        initState.setAgentY(5, 0);
         env.setInitialState(initState);
 
         Percept p = env.getPercept(agent);

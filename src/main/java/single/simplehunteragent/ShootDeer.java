@@ -10,7 +10,8 @@ import single.agent.State;
  */
 public class ShootDeer extends Action {
 
-	public ShootDeer() {
+	public ShootDeer(int uniqId) {
+		super(uniqId);
 	}
 
 	/**
@@ -28,8 +29,8 @@ public class ShootDeer extends Action {
 		else
 			System.out.println("ERROR - Argument to ShootDeer.execute() is not of type HunterState");
 
-		x = state.getAgentX();
-		y = state.getAgentY();
+		x = state.getAgentX(uniqId);
+		y = state.getAgentY(uniqId);
 		state.killDeer(x, y);
 		return state;
 	}

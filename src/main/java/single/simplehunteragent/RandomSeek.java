@@ -12,7 +12,8 @@ import java.util.Random;
  */
 public class RandomSeek extends Action {
 
-	public RandomSeek() {
+	public RandomSeek(int uniqId) {
+		super(uniqId);
 	}
 
 	/**
@@ -31,8 +32,8 @@ public class RandomSeek extends Action {
 		else
 			System.out.println("ERROR - Argument to RandomSeek.execute() is not of type HunterState");
 
-		x = state.getAgentX();
-		y = state.getAgentY();
+		x = state.getAgentX(uniqId);
+		y = state.getAgentY(uniqId);
 
 		Random rand = new Random();
 
@@ -42,8 +43,8 @@ public class RandomSeek extends Action {
 			newY = y + rand.nextInt(3) - 1;  // y +/-= 1
 
 			if (state.inBounds(newX, newY) && !state.isHill(newX, newY) && !(newX == x && newY == y)) {
-				state.setAgentX(newX);
-				state.setAgentY(newY);
+				state.setAgentX(newX, uniqId);
+				state.setAgentY(newY, uniqId);
 				break;
 			}
 			tries++;

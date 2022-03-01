@@ -21,8 +21,8 @@ public class HunterPercept extends Percept {
 
 		int x, y;
 
-		x = state.getAgentX();
-		y = state.getAgentY();
+		x = state.getAgentX(agent.getUniqId());
+		y = state.getAgentY(agent.getUniqId());
 
 		/** determine deer range */
 		if (state.isDeerInEyesight(x, y)) {

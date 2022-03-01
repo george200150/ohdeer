@@ -9,6 +9,10 @@ import java.util.Random;
 
 public class DirectedSeek extends Action {
 
+    public DirectedSeek(int uniqId) {
+        super(uniqId);
+    }
+
     int manhattenWithDiagonal(int x1, int y1, int x2, int y2) {
         int dx = Math.abs(x2 - x1);
         int dy = Math.abs(y2 - y1);
@@ -36,8 +40,8 @@ public class DirectedSeek extends Action {
         else
             System.out.println("ERROR - Argument to DirectedSeek.execute() is not of type HunterState");
 
-        x = state.getAgentX();
-        y = state.getAgentY();
+        x = state.getAgentX(uniqId);
+        y = state.getAgentY(uniqId);
 
         SharedMemory shm = SharedMemory.getInstance();
 
@@ -92,18 +96,18 @@ public class DirectedSeek extends Action {
         int finalX = agent.cachedObjectiveX;
         int finalY = agent.cachedObjectiveY;
 
-        int dx = finalX - state.getAgentX();
-        int dy = finalY - state.getAgentY();
+        int dx = finalX - state.getAgentX(uniqId);
+        int dy = finalY - state.getAgentY(uniqId);
 
         int stepX = sign(dx);
         int stepY = sign(dy);  // allow (+/-) (1,1), (1,0) or (0,1) movement
 
-        int newX = state.getAgentX() + stepX;
-        int newY = state.getAgentY() + stepY;
+        int newX = state.getAgentX(uniqId) + stepX;
+        int newY = state.getAgentY(uniqId) + stepY;
 
         if (state.inBounds(newX, newY) && !state.isHill(newX, newY)) {
-            state.setAgentX(newX);
-            state.setAgentY(newY);
+            state.setAgentX(newX, uniqId);
+            state.setAgentY(newY, uniqId);
         }
         return state;
     }

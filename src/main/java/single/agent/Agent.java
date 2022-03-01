@@ -6,6 +6,12 @@ package single.agent;
  */
 public abstract class Agent {
 
+	protected int uniqId;
+
+	public Agent(int uniqId) {
+		this.uniqId = uniqId;
+	}
+
 	/**
 	 * Provides a Percept to the single.agent. If the single.agent has internal state, this
 	 * method should update it.
@@ -18,4 +24,7 @@ public abstract class Agent {
 	 */
 	public abstract Action selectAction();
 
+	public int getUniqId() {
+		return this.uniqId;
+	}
 }

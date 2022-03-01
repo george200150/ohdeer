@@ -7,8 +7,8 @@ import static org.junit.Assert.*;
 public class DirectedSeekTest {
 
     @Test
-    public void testmanhattenWithDiagonal() {
-        DirectedSeek action = new DirectedSeek();
+    public void testmanhattenWithDiagonal() {  // test must be run with "(int) Math.sqrt(2) * diagonalSteps + straightSteps" (note that the formula is without "-1")
+        DirectedSeek action = new DirectedSeek(0);
         // (1,1) -> (8,8) diagonala
         int noTurns = action.manhattenWithDiagonal(1, 1, 8, 8);
         assertEquals("from (1,1) to (8,8) it takes 7 turns!", 7, noTurns);
