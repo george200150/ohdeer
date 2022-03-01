@@ -1,4 +1,4 @@
-package single.simplehunteragent;
+package single.mineragent;
 
 import single.agent.Action;
 import single.agent.Agent;
@@ -6,10 +6,10 @@ import single.agent.Environment;
 import single.agent.Percept;
 
 
-/** A simulator for the predator-prey world environment. */
-public class HunterEnvironment extends Environment {
+/** A simulator for the gold-mining world environment. */
+public class MinerEnvironment extends Environment {
 
-  public HunterEnvironment() {
+  public MinerEnvironment() {
   }
 
   /**
@@ -17,19 +17,14 @@ public class HunterEnvironment extends Environment {
    * function.
    */
   protected Percept getPercept(Agent a) {
-    HunterPercept p;
-//    DeerPercept pd;
+    MinerPercept p;
 
-    if (state instanceof HunterState) {
-//    if (state.hunter) {
-      p = new HunterPercept((HunterState) state, a);
+    if (state instanceof MinerState) {
+      p = new MinerPercept((MinerState) state, a);
       System.out.println("Percept: " + p.toString());
       return p;
     } else {
-//      pd = new DeerPercept((HunterState) state, a); // TODO: separate Hunter vs Deer States... but not for now.......
-//      System.out.println("Percept: " + pd.toString());
-//      return pd;
-      System.out.println("ERROR !!!");
+      System.out.println("ERROR - state is not a MinerState object.");
       return null;
     }
   }

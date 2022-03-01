@@ -1,4 +1,4 @@
-package single.simplehunteragent;
+package single.mineragent;
 
 import single.agent.Action;
 import single.agent.Agent;
@@ -29,41 +29,41 @@ public class DirectedSeek extends Action {
     @Override
     public State execute(Agent a, State s) {
         int x, y;
-        int deerX, deerY;
-        HunterState state = null;
-        HunterAgent agent = null;
+        int goldX, goldY;
+        MinerState state = null;
+        MinerAgent agent = null;
 
-        if (s instanceof HunterState && a instanceof HunterAgent) {
-            state = (HunterState) s;
-            agent = (HunterAgent) a;
+        if (s instanceof MinerState && a instanceof MinerAgent) {
+            state = (MinerState) s;
+            agent = (MinerAgent) a;
         }
         else
-            System.out.println("ERROR - Argument to DirectedSeek.execute() is not of type HunterState");
+            System.out.println("ERROR - Argument to DirectedSeek.execute() is not of type MinerState");
 
         x = state.getAgentX(uniqId);
         y = state.getAgentY(uniqId);
 
         SharedMemory shm = SharedMemory.getInstance();
 
-        deerX = shm.getDeerX();
-        deerY = shm.getDeerY();
-        int noTurns = manhattenWithDiagonal(x, y, deerX, deerY); // speed == 1unit/turn, so it does not matter here
+        goldX = shm.getGoldX();
+        goldY = shm.getGoldY();
+        int noTurns = manhattenWithDiagonal(x, y, goldX, goldY); // speed == 1unit/turn, so it does not matter here
         System.out.println("noTurns = " + noTurns);
 
-        // we have a local cache in HunterAgent (x, y)
-         if (agent.cachedObjectiveX == shm.getDeerX() &&
-                 agent.cachedObjectiveY == shm.getDeerY()) {
+        // we have a local cache in MinerAgent (x, y)
+         if (agent.cachedObjectiveX == shm.getGoldX() &&
+                 agent.cachedObjectiveY == shm.getGoldY()) {
              agent.cachedTurnsRemaining = noTurns;
              state = moveTowardsObjective(agent, state);
              return state;
          }
 
         // Here, we know for sure that shm must have newer information and we move our course towards another objective.
-        // compute number of turns it takes to reach deer location
+        // compute number of turns it takes to reach gold location
         Random rand = new Random();
-        // possibility to intercept deer movement as turns go on (don't follow, meet head on)
-        // number of turns * (deer) speed => radius of circle
-        // decide where to go based on the circle of possible future locations of the deer (don't bother about turns++)
+        // possibility to intercept gold movement as turns go on (don't follow, meet head on)
+        // inaccuracy rate proportional with the number of turns it takes a miner to reach the gold => radius of circle
+        // decide where to go based on the circle of possible future locations of the gold (don't bother about turns++)
         int tries = 0;
         while (tries < 100) {
             int drandX = rand.nextInt(noTurns+1);
@@ -92,7 +92,7 @@ public class DirectedSeek extends Action {
         return -1;
     }
 
-    private HunterState moveTowardsObjective(HunterAgent agent, HunterState state) {
+    private MinerState moveTowardsObjective(MinerAgent agent, MinerState state) {
         int finalX = agent.cachedObjectiveX;
         int finalY = agent.cachedObjectiveY;
 

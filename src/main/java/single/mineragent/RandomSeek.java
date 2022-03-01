@@ -1,4 +1,4 @@
-package single.simplehunteragent;
+package single.mineragent;
 
 import single.agent.Action;
 import single.agent.Agent;
@@ -8,7 +8,7 @@ import java.util.Random;
 
 
 /**
- * A predator-prey world action that causes the single.agent to move randomly in another location.
+ * A gold-mining world action that causes the single.agent to move randomly in another location.
  */
 public class RandomSeek extends Action {
 
@@ -25,12 +25,12 @@ public class RandomSeek extends Action {
 
 		int x, y;
 		int newX, newY;
-		HunterState state = null;
+		MinerState state = null;
 
-		if (s instanceof HunterState)
-			state = (HunterState) s;
+		if (s instanceof MinerState)
+			state = (MinerState) s;
 		else
-			System.out.println("ERROR - Argument to RandomSeek.execute() is not of type HunterState");
+			System.out.println("ERROR - Argument to RandomSeek.execute() is not of type MinerState");
 
 		x = state.getAgentX(uniqId);
 		y = state.getAgentY(uniqId);

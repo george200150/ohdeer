@@ -1,4 +1,4 @@
-package single.simplehunteragent;
+package single.mineragent;
 
 import org.junit.Test;
 

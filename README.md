@@ -1,2 +1,2 @@
-# ohdeer
-Multiagent System for simululating a predator-prey problem
+# goldigger
+Multiagent System for simulating a collective resource gathering problem

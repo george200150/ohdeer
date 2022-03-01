@@ -1,4 +1,4 @@
-package single.simplehunteragent;
+package single.mineragent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,27 +6,27 @@ import java.util.List;
 
 public class SharedMemory {
 
-    private static int deerX;
-    private static int deerY;
+    private static int goldX;
+    private static int goldY;
 
-    private static int noHunters;
+    private static int noMiners;
     private final List<ObserverAgent> observers = new ArrayList<>();
 
     private static SharedMemory instance;
 
     private SharedMemory(int noH) {
-        noHunters = noH;
-        deerX = -1;
-        deerY = -1;
+        noMiners = noH;
+        goldX = -1;
+        goldY = -1;
     }
 
-    public void addObserver(ObserverAgent agent){
+    public void addObserver(ObserverAgent agent) {
         observers.add(agent);
     }
 
-    public void broadcastDeerData(){
+    public void broadcastGoldData() {
         for (ObserverAgent observer : observers) {
-            observer.sendDeerData(deerX, deerY);
+            observer.sendGoldData(goldX, goldY);
         }
     }
 
@@ -37,25 +37,25 @@ public class SharedMemory {
         return instance;
     }
 
-    public int getDeerX() {
-        return deerX;
+    public int getGoldX() {
+        return goldX;
     }
 
-    public int getDeerY() {
-        return deerY;
+    public int getGoldY() {
+        return goldY;
     }
 
-    public void setDeerX(int x) {
-        deerX = x;
+    public void setGoldX(int x) {
+        goldX = x;
     }
 
-    public void setDeerY(int y) {
-        deerY = y;
+    public void setGoldY(int y) {
+        goldY = y;
     }
 
     public void reset() {
-        deerX = -1;
-        deerY = -1;
+        goldX = -1;
+        goldY = -1;
         observers.removeIf((ignored) -> true); // remove all
     }
 
