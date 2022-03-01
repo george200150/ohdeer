@@ -1,11 +1,11 @@
 package single.mineragent;
 
-import single.PythonUtils;
 import single.agent.State;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 /** Represents a state in the gold-mining world. */
@@ -14,6 +14,8 @@ public class MinerState extends State { // TODO: refactor setup and teardown; ad
 	/* Constants for the initial state of the single.agent. */
 	protected static int[] INIT_X = new int[]{1, 8};
 	protected static int[] INIT_Y = new int[]{1, 8};
+
+	private static ReentrantLock lock = new ReentrantLock();
 
 	private static final int CLEAR = 0;
 	private static final int GOLD = 1;
@@ -102,24 +104,33 @@ public class MinerState extends State { // TODO: refactor setup and teardown; ad
 	 * Changes the single.agent's X position.
 	 */
 	public void setAgentX(int x, int indx) {
+		lock.lock();
+
 		map[agentX[indx]][agentY[indx]] = CLEAR;
 		agentX[indx] = x;
 		map[x][agentY[indx]] = MINR;
+
+		lock.unlock();
 	}
 
 	/**
 	 * Changes the single.agent's Y position.
 	 */
 	public void setAgentY(int y, int indx) {
+		lock.lock();
+
 		map[agentX[indx]][agentY[indx]] = CLEAR;
 		agentY[indx] = y;
 		map[agentX[indx]][y] = MINR;
+
+		lock.unlock();
 	}
 
 	/**
 	 * Removes some of the gold from the specified location.
 	 */
 	public void mineGold(int x, int y) {
+		lock.lock();
 		boolean flag = false;
 		// check if gold is in pickaxe range - the miner is in the middle (x,y) and we check their surroundings
 		if (x - 1 >= 0 && y - 1 >= 0 && map[x - 1][y - 1] == GOLD) {
@@ -178,6 +189,8 @@ public class MinerState extends State { // TODO: refactor setup and teardown; ad
 			}
 			goldQuantity--;
 		}
+
+		lock.unlock();
 	}
 
 	public boolean isGoldInEyesight(int x, int y) {
@@ -262,6 +275,8 @@ public class MinerState extends State { // TODO: refactor setup and teardown; ad
 	 * facing. On the map, "A" denotes the single.agent and "*" denotes the gold.
 	 */
 	public void display() {
+		lock.lock();
+
 		for (int j = 1; j < width - 1; j++)
 			System.out.print("  " + j);
 		System.out.println();
@@ -295,14 +310,16 @@ public class MinerState extends State { // TODO: refactor setup and teardown; ad
 		System.out.println("Location A2: (" + agentX[1] + "," + agentY[1] + ")");
 		System.out.println();
 
-		System.out.println("Press RETURN to continue.");
+//		System.out.println("Press RETURN to continue.");
+//
+//		BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+//		try {
+//			String input = console.readLine();
+//		} catch (IOException e) {
+//			System.out.println(e.getMessage());
+//		}
 
-		BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
-		try {
-			String input = console.readLine();
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
-		}
+		lock.unlock();
 	}
 
 }
