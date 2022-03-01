@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 
 
 /** Represents a state in the gold-mining world. */
-public class MinerState extends State {
+public class MinerState extends State { // TODO: refactor setup and teardown; add LOS setter
 
 	/* Constants for the initial state of the single.agent. */
 	protected static int[] INIT_X = new int[]{1, 8};
@@ -37,8 +37,8 @@ public class MinerState extends State {
 	};
 	private static int n;
 
-	//	private static int[] minerLOS = new int[]{-2, -1, 0, 1, 2};
-	private static int[] minerLOS = new int[]{-4, -3, -2, -1, 0, 1, 2, 3, 4};  // Miner' Lane Of Sight
+		private static int[] minerLOS = new int[]{-2, -1, 0, 1, 2};
+//	private static int[] minerLOS = new int[]{-4, -3, -2, -1, 0, 1, 2, 3, 4};  // Miner' Lane Of Sight
 
 	/* Variables for the state of the single.agent. */
 	protected int[] agentX;
@@ -50,7 +50,7 @@ public class MinerState extends State {
 	protected int[][] map;
 
 	protected boolean isGoldRemaining = true;
-	protected int goldQuantity = 10;
+	protected int goldQuantity = 5;
 
 	protected int height;
 	protected int width;
@@ -274,15 +274,14 @@ public class MinerState extends State {
 		for (int i = 1; i < height - 1; i++) {
 			System.out.print(i + "|");
 			for (int j = 1; j < width - 1; j++) {
-				for (int indx : PythonUtils.range(INIT_X.length)) {
-					if (i == agentX[indx] && j == agentY[indx])
-						System.out.print("A");
-					else if (hasGold(i, j))
-						System.out.print("*");
-					else
-						System.out.print(" ");
-					System.out.print(" |");
+				if (i == agentX[0] && j == agentY[0] || i == agentX[1] && j == agentY[1]) {
+					System.out.print("A");
+				} else if (hasGold(i, j)) {
+					System.out.print("*");
+				} else {
+					System.out.print(" ");
 				}
+				System.out.print(" |");
 			}
 			System.out.println();
 

@@ -41,12 +41,11 @@ public class MinerAgent extends Agent implements ObserverAgent {
 					SharedMemory.getInstance().getGoldY() != cachedObjectiveY) {
 				return new AnnounceGoldLocation(this.uniqId);
 			}
-			if (cachedObjectiveX != -1 && SharedMemory.getInstance().getGoldX() != -1) // gold was spotted; check shm
-				return new DirectedSeek(this.uniqId);
-			else
-				return new RandomSeek(this.uniqId); // if objective has been reached, then resume to random movement
 		}
-		return new RandomSeek(this.uniqId);
+		if (cachedObjectiveX != -1 && SharedMemory.getInstance().getGoldX() != -1) // gold was spotted; check shm
+			return new DirectedSeek(this.uniqId);
+		else
+			return new RandomSeek(this.uniqId); // if objective has been reached, then resume to random movement
 	}
 
 	@Override
