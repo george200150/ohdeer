@@ -2,45 +2,45 @@ package single.mineragent;
 
 import single.agent.State;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
 /** Represents a state in the gold-mining world. */
 public class MinerState extends State { // TODO: refactor setup and teardown; add LOS setter
 
 	/* Constants for the initial state of the single.agent. */
-	protected static int[] INIT_X = new int[]{1, 8};
-	protected static int[] INIT_Y = new int[]{1, 8};
+	protected static int[] INIT_X = new int[]{1, 10};
+	protected static int[] INIT_Y = new int[]{1, 10};
 
-	private static ReentrantLock lock = new ReentrantLock();
+	private static final ReadWriteLock lock = new ReentrantReadWriteLock();
 
 	private static final int CLEAR = 0;
 	private static final int GOLD = 1;
 	private static final int HILL = 2;
-	private static final int MINR = 3;
+	private static final int MINER = 3;
 
 	/*
-	 * Default map for initial state. The forest is completely surrounded by hills
+	 * Default map for initial state. The area is completely surrounded by hills
 	 */
 	protected static int[][] defaultMap = {
-			{HILL, HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL},
-			{HILL, MINR,  CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
-			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
-			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
-			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
-			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, GOLD,  CLEAR, CLEAR, CLEAR, HILL},
-			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
-			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
-			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, MINR,  HILL},
-			{HILL, HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL}
+			{HILL, HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL},
+			{HILL, MINER, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, GOLD,  CLEAR, CLEAR, CLEAR, HILL},
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, HILL},
+			{HILL, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, MINER, HILL},
+			{HILL, HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL,  HILL}
 	};
-	private static int n;
 
-		private static int[] minerLOS = new int[]{-2, -1, 0, 1, 2};
-//	private static int[] minerLOS = new int[]{-4, -3, -2, -1, 0, 1, 2, 3, 4};  // Miner' Lane Of Sight
+	private static int[] actionRange = new int[]{-1, 0, 1};
+	private static int[] minerLOS = new int[]{-2, -1, 0, 1, 2};
+	//private static int[] minerLOS = new int[]{-4, -3, -2, -1, 0, 1, 2, 3, 4};  // Miner' Lane Of Sight
 
 	/* Variables for the state of the single.agent. */
 	protected int[] agentX;
@@ -71,7 +71,6 @@ public class MinerState extends State { // TODO: refactor setup and teardown; ad
 		state.map = defaultMap;
 		state.agentX = INIT_X;
 		state.agentY = INIT_Y;
-		n = state.width;
 		return state;
 	}
 
@@ -104,138 +103,100 @@ public class MinerState extends State { // TODO: refactor setup and teardown; ad
 	 * Changes the single.agent's X position.
 	 */
 	public void setAgentX(int x, int indx) {
-		lock.lock();
+		lock.writeLock().lock();
 
 		map[agentX[indx]][agentY[indx]] = CLEAR;
 		agentX[indx] = x;
-		map[x][agentY[indx]] = MINR;
+		map[x][agentY[indx]] = MINER;
 
-		lock.unlock();
+		lock.writeLock().unlock();
 	}
 
 	/**
 	 * Changes the single.agent's Y position.
 	 */
 	public void setAgentY(int y, int indx) {
-		lock.lock();
+		lock.writeLock().lock();
 
 		map[agentX[indx]][agentY[indx]] = CLEAR;
 		agentY[indx] = y;
-		map[agentX[indx]][y] = MINR;
+		map[agentX[indx]][y] = MINER;
 
-		lock.unlock();
+		lock.writeLock().unlock();
 	}
 
 	/**
 	 * Removes some of the gold from the specified location.
 	 */
 	public void mineGold(int x, int y) {
-		lock.lock();
-		boolean flag = false;
-		// check if gold is in pickaxe range - the miner is in the middle (x,y) and we check their surroundings
-		if (x - 1 >= 0 && y - 1 >= 0 && map[x - 1][y - 1] == GOLD) {
-			if (goldQuantity == 1) {
-				map[x - 1][y - 1] = CLEAR;
+		lock.writeLock().lock();
+		for (int i : actionRange) {
+			for (int j : actionRange) {
+				if (inBounds(x + i, y + j) && map[x + i][y + j] == GOLD) {
+					if (goldQuantity == 1) {
+						map[x + i][y + j] = CLEAR;
+						isGoldRemaining = false;
+					}
+					goldQuantity--;
+				}
 			}
-			flag = true;
 		}
-		if (x - 1 >= 0 && map[x - 1][y] == GOLD) {
-			if (goldQuantity == 1) {
-				map[x - 1][y] = CLEAR;
-			}
-			flag = true;
-		}
-		if (x + 1 < n && y + 1 < n && map[x - 1][y + 1] == GOLD) {
-			if (goldQuantity == 1) {
-				map[x - 1][y + 1] = CLEAR;
-			}
-			flag = true;
-		}
-
-		if (y - 1 >= 0 && map[x][y - 1] == GOLD) {
-			if (goldQuantity == 1) {
-				map[x][y - 1] = CLEAR;
-			}
-			flag = true;
-		}
-		if (y + 1 < n && map[x][y + 1] == GOLD) {
-			if (goldQuantity == 1) {
-				map[x][y + 1] = CLEAR;
-			}
-			flag = true;
-		}
-
-		if (x + 1 < n && y - 1 >= 0 && map[x + 1][y - 1] == GOLD) {
-			if (goldQuantity == 1) {
-				map[x + 1][y - 1] = CLEAR;
-			}
-			flag = true;
-		}
-		if (x + 1 < n && map[x + 1][y] == GOLD) {
-			if (goldQuantity == 1) {
-				map[x + 1][y] = CLEAR;
-			}
-			flag = true;
-		}
-		if (x + 1 < n && y + 1 < n && map[x + 1][y + 1] == GOLD) {
-			if (goldQuantity == 1) {
-				map[x + 1][y + 1] = CLEAR;
-			}
-			flag = true;
-		}
-		if (flag) {
-			if (goldQuantity == 1) {
-				isGoldRemaining = false;
-			}
-			goldQuantity--;
-		}
-
-		lock.unlock();
+		lock.writeLock().unlock();
 	}
 
 	public boolean isGoldInEyesight(int x, int y) {
+		lock.readLock().lock();
 		for (int i : minerLOS) {
 			for (int j : minerLOS) {
 				if (inBounds(x + i, y + j) && map[x + i][y + j] == GOLD) {
+					lock.readLock().unlock();
 					return true;
 				}
 			}
 		}
+		lock.readLock().unlock();
 		return false;
 	}
 
 	public boolean canMineGold(int x, int y) {
-		return x - 1 >= 0 && y - 1 >= 0 && map[x - 1][y - 1] == GOLD ||
-				(x - 1 >= 0 && map[x - 1][y] == GOLD) ||
-				(x + 1 < n && y + 1 < n && map[x - 1][y + 1] == GOLD) ||
-
-				(y - 1 >= 0 && map[x][y - 1] == GOLD) ||
-				(y + 1 < n && map[x][y + 1] == GOLD) ||
-
-				(x + 1 < n && y - 1 >= 0 && map[x + 1][y - 1] == GOLD) ||
-				(x + 1 < n && map[x + 1][y] == GOLD) ||
-				(x + 1 < n && y + 1 < n && map[x + 1][y + 1] == GOLD);
+		lock.readLock().lock();
+		for (int i : actionRange) {
+			for (int j : actionRange) {
+				if (inBounds(x + i, y + j) && map[x + i][y + j] == GOLD) {
+					lock.readLock().unlock();
+					return true;
+				}
+			}
+		}
+		lock.readLock().unlock();
+		return false;
 	}
 
 	public int getGoldX(int x, int y) {  // only for eyesight range
+		lock.readLock().lock();
 		for (int i : minerLOS) {
 			for (int j : minerLOS) {
 				if (inBounds(x + i, y + j) && hasGold(x + i, y + j)) {
+					lock.readLock().unlock();
 					return x + i;
 				}
 			}
 		}
+		lock.readLock().unlock();
 		return -10;
 	}
 
 	public int getGoldY(int x, int y) {  // only for eyesight range (could be refactored, but I like only python tuples)
+		lock.readLock().lock();
 		for (int i : minerLOS) {
 			for (int j : minerLOS) {
 				if (inBounds(x + i, y + j) && hasGold(x + i, y + j)) {
+					lock.readLock().unlock();
 					return y + j;
 				}
 			}
 		}
+		lock.readLock().unlock();
 		return -10;
 	}
 
@@ -275,7 +236,7 @@ public class MinerState extends State { // TODO: refactor setup and teardown; ad
 	 * facing. On the map, "A" denotes the single.agent and "*" denotes the gold.
 	 */
 	public void display() {
-		lock.lock();
+		lock.writeLock().lock();
 
 		for (int j = 1; j < width - 1; j++)
 			System.out.print("  " + j);
@@ -319,7 +280,7 @@ public class MinerState extends State { // TODO: refactor setup and teardown; ad
 //			System.out.println(e.getMessage());
 //		}
 
-		lock.unlock();
+		lock.writeLock().unlock();
 	}
 
 }

@@ -22,7 +22,7 @@ public class MinerSimulation extends Simulation {
 	 */
 	public static void main(String[] args) {
 
-		System.out.println("The gold-mining World Agent Test");
+		System.out.println("The Gold-Rush World Agent Test");
 		System.out.println("-----------------------------------");
 		System.out.println();
 

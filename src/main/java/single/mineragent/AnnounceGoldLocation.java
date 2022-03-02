@@ -20,7 +20,7 @@ public class AnnounceGoldLocation extends Action {
         if (s instanceof MinerState)
             state = (MinerState) s;
         else
-            System.out.println("ERROR - Argument to RandomSeek.execute() is not of type MinerState");
+            System.out.println("ERROR - Argument to AnnounceGoldLocation.execute() is not of type MinerState");
 
         x = state.getAgentX(uniqId);
         y = state.getAgentY(uniqId);
